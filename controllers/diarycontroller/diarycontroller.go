@@ -25,8 +25,8 @@ func GetAllDiary(w http.ResponseWriter, r *http.Request) {
 	Lg := []models.Head{}
 	Ic := []models.Icon{}
 	var response models.Dd
-	diaryInput := models.Diary{User: user}
-	if err := models.DB.Table("diary-data").Where(&diaryInput, user).Order("time DESC").Find(&diary).Error; err != nil {
+	var diaryInput []models.Diary
+	if err := models.DB.Table("diary-data").Where(diaryInput, user).Order("time DESC").Find(&diary).Error; err != nil {
 		response := map[string]string{"message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
@@ -103,7 +103,7 @@ func GetDiary(w http.ResponseWriter, r *http.Request) {
 	var response models.Dd2
 	diaryInput := models.Diary{User: user, No: no}
 
-	if err := models.DB.Table("diary-data").Where(&diaryInput, user).Find(&diary, no).Error; err != nil {
+	if err := models.DB.Table("diary-data").Where(&diaryInput, user, no).Find(&diary).Error; err != nil {
 		response := map[string]string{"message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return

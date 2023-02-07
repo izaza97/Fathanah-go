@@ -2,7 +2,7 @@ package models
 
 type Diary struct {
 	No      int64  `gorm:"primaryKey" json:"no"`
-	Time    string `gorm:"datetime" json:"time"`
+	Time    string `json:"time"`
 	User    int64  `json:"user"`
 	Subject string `json:"subject"`
 	Body    string `json:"body"`

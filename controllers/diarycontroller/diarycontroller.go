@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -61,7 +62,9 @@ func CreateDiary(w http.ResponseWriter, r *http.Request) {
 
 	// memasukan parameter user ke database dan membuat datetime
 	now := time.Now()
-	diaryInput := models.Diary{User: user, Time: now.String()}
+	curentime := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Hour(), now.Second(), 0, time.UTC)
+	time := strings.TrimSuffix(curentime.String(), "+0000 UTC")
+	diaryInput := models.Diary{User: user, Time: time}
 	subject := r.Form.Get("subject")
 	body := r.Form.Get("body")
 	diaryInput.Subject = subject
@@ -143,7 +146,9 @@ func UpdateDiary(w http.ResponseWriter, r *http.Request) {
 
 	// memasukan parameter no ke database
 	now := time.Now()
-	diaryInput := models.Diary{User: user, No: no, Time: now.String()}
+	curentime := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Hour(), now.Second(), 0, time.UTC)
+	time := strings.TrimSuffix(curentime.String(), "+0000 UTC")
+	diaryInput := models.Diary{User: user, No: no, Time: time}
 	subject := r.Form.Get("subject")
 	body := r.Form.Get("body")
 	diaryInput.Subject = subject

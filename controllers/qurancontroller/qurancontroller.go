@@ -75,6 +75,11 @@ func Shows(w http.ResponseWriter, r *http.Request) {
 	if icon != nil {
 		log.Print(icon.Error())
 	}
+
+	// back := models.DB.Table("quran-surah").Where("`id` >= ?-1 LIMIT 1", bck)
+
+	// next := models.DB.Table("quran-surah").Where("`id` >= ?+1 LIMIT 1", nxt)
+
 	response.Icon = Ic
 	response.Logo = Lg
 	response.Pickedsurah = Pck

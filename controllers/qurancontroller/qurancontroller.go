@@ -51,6 +51,8 @@ func Shows(w http.ResponseWriter, r *http.Request) {
 	Ic := []models.Icon{}
 	Srh := []models.Surah{}
 	Pck := []models.Picked{}
+	bck := []models.Back{}
+	nxt := []models.Next{}
 	var response models.Dqrn
 	// dhInput := models.Dh{menu: int(menu)}
 	Pickedsurah := models.DB.Table("quran-surah").Where("id = ?", surah).Scan(&Pck).Error
@@ -76,15 +78,37 @@ func Shows(w http.ResponseWriter, r *http.Request) {
 		log.Print(icon.Error())
 	}
 
-	// back := models.DB.Table("quran-surah").Where("`id` >= ?-1 LIMIT 1", bck)
+	if surah == 1 {
+		Back := models.DB.Table("quran-surah").Where("id = 114").Scan(&bck).Error
+		if Back != nil {
+			log.Print(Back.Error())
+		}
+	} else {
+		Back := models.DB.Table("quran-surah").Where("id >= ?-1 LIMIT 1", surah).Scan(&bck).Error
+		if Back != nil {
+			log.Print(Back.Error())
+		}
+	}
 
-	// next := models.DB.Table("quran-surah").Where("`id` >= ?+1 LIMIT 1", nxt)
+	if surah == 114 {
+		Next := models.DB.Table("quran-surah").Where("id = 1").Scan(&nxt).Error
+		if Next != nil {
+			log.Print(Next.Error())
+		}
+	} else {
+		Next := models.DB.Table("quran-surah").Where("id >= ?+1 LIMIT 1", surah).Scan(&nxt).Error
+		if Next != nil {
+			log.Print(Next.Error())
+		}
+	}
 
 	response.Icon = Ic
 	response.Logo = Lg
 	response.Pickedsurah = Pck
 	response.Surah = Srh
 	response.Data = dh
+	response.Back = bck
+	response.Next = nxt
 	w.Header().Set("Content-Type", "appication/json")
 	json.NewEncoder(w).Encode(response)
 }

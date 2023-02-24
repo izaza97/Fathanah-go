@@ -18,12 +18,24 @@ type Surah struct {
 	Name string `json:"surah"`
 }
 
+type Back struct {
+	Id   int    `json:"id"`
+	Name string `json:"surah"`
+}
+
+type Next struct {
+	Id   int    `json:"id"`
+	Name string `json:"surah"`
+}
+
 type Dqrn struct {
 	Icon        []Icon
 	Logo        []Head
 	Pickedsurah []Picked
 	Surah       []Surah
 	Data        []Qrn
+	Back        []Back
+	Next        []Next
 }
 
 type Qrns struct {

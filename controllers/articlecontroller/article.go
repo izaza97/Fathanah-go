@@ -43,7 +43,7 @@ func Showm(w http.ResponseWriter, r *http.Request) {
 	Lg := []models.Head{}
 	Ac := []models.Cart{}
 	Ic := []models.Icon{}
-	var Ddh models.Dart
+	var article models.Dart
 	title := r.FormValue("title")
 	category := models.DB.Table("article-category").Scan(&Ac).Error
 	if category != nil {
@@ -54,20 +54,20 @@ func Showm(w http.ResponseWriter, r *http.Request) {
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
-	result := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'Fathanah'").Find(&Lg).Error
-	if result != nil {
-		log.Print(result.Error())
+	header := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'Fathanah'").Find(&Lg).Error
+	if header != nil {
+		log.Print(header.Error())
 	}
 	icon := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'favicon'").Find(&Ic).Error
 	if icon != nil {
 		log.Print(icon.Error())
 	}
-	Ddh.Icon = Ic
-	Ddh.Logo = Lg
-	Ddh.Category = Ac
-	Ddh.Data = brt
+	article.Icon = Ic
+	article.Logo = Lg
+	article.Category = Ac
+	article.Data = brt
 	w.Header().Set("Content-Type", "appication/json")
-	json.NewEncoder(w).Encode(Ddh)
+	json.NewEncoder(w).Encode(article)
 }
 
 func Showc(w http.ResponseWriter, r *http.Request) {
@@ -76,7 +76,7 @@ func Showc(w http.ResponseWriter, r *http.Request) {
 	Pac := []models.Cart{}
 	Ac := []models.Cart{}
 	Ic := []models.Icon{}
-	var Ddh models.Cartl
+	var article models.Cartl
 	vars := mux.Vars(r)
 	title := r.FormValue("title")
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
@@ -105,13 +105,13 @@ func Showc(w http.ResponseWriter, r *http.Request) {
 	if icon != nil {
 		log.Print(icon.Error())
 	}
-	Ddh.Icon = Ic
-	Ddh.Logo = Lg
-	Ddh.PickC = Pac
-	Ddh.Category = Ac
-	Ddh.Data = brt
+	article.Icon = Ic
+	article.Logo = Lg
+	article.PickC = Pac
+	article.Category = Ac
+	article.Data = brt
 	w.Header().Set("Content-Type", "appication/json")
-	json.NewEncoder(w).Encode(Ddh)
+	json.NewEncoder(w).Encode(article)
 }
 
 //show berita controller
@@ -123,17 +123,17 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var brt []models.Art
-	var brtn []models.Artn
+	var art []models.Art
+	var artn []models.Artn
 	Ic := []models.Icon{}
 	Lg := []models.Head{}
-	var Ddh models.Vart
-	if err := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`time`, `article-data`.`img`, `article-data`.`title`, `article-category`.`category`, `article-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `article-category` JOIN `img-path` ON `article-data`.`category` = `article-category`.`id` AND `article-data`.`path` =`img-path`.`id`").Where("`article-data`.`id`= ?", id).Find(&brt).Error; err != nil {
+	var article models.Vart
+	if err := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`time`, `article-data`.`img`, `article-data`.`title`, `article-category`.`category`, `article-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `article-category` JOIN `img-path` ON `article-data`.`category` = `article-category`.`id` AND `article-data`.`path` =`img-path`.`id`").Where("`article-data`.`id`= ?", id).Find(&art).Error; err != nil {
 		response := map[string]string{"message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
-	result2 := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`title`, `article-data`.`time`").Limit(5).Order("time DESC").Find(&brtn).Error
+	result2 := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`title`, `article-data`.`time`").Limit(5).Order("time DESC").Find(&artn).Error
 	if result2 != nil {
 		log.Print(result2.Error())
 	}
@@ -145,10 +145,10 @@ func Show(w http.ResponseWriter, r *http.Request) {
 	if icon != nil {
 		log.Print(icon.Error())
 	}
-	Ddh.Icon = Ic
-	Ddh.Logo = Lg
-	Ddh.Data = brt
-	Ddh.Data2 = brtn
+	article.Icon = Ic
+	article.Logo = Lg
+	article.Data = art
+	article.Data2 = artn
 	w.Header().Set("Content-Type", "appication/json")
-	json.NewEncoder(w).Encode(Ddh)
+	json.NewEncoder(w).Encode(article)
 }

@@ -30,6 +30,3 @@ func ConnectDatabase() {
 	}
 	DB = db
 }
-
-//192.168.138.139
-//localhost

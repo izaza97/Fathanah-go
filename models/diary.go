@@ -15,8 +15,6 @@ type Diaryscn struct {
 }
 
 type Dd struct {
-	Icon []Icon
-	Logo []Head
 	Data []Diaryscn
 }
 
@@ -28,7 +26,5 @@ type Diarys struct {
 }
 
 type Dd2 struct {
-	Icon []Icon
-	Logo []Head
 	Data []Diarys
 }

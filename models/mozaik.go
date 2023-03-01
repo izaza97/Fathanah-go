@@ -11,8 +11,6 @@ type Mozaikdata struct {
 }
 
 type Dmozaik struct {
-	Icon []Icon
-	Logo []Head
 	Data []Mozaikdata
 }
 
@@ -23,8 +21,6 @@ type Mozaikl struct {
 }
 
 type Vmozaik struct {
-	Icon     []Icon
-	Logo     []Head
 	Data     []Mozaikdata
 	Sidedata []Mozaikl
 }

@@ -17,23 +17,17 @@ type Artn struct {
 }
 
 type Dart struct {
-	Icon     []Icon
-	Logo     []Head
 	Category []Cart
 	Data     []Art
 }
 
 type Vart struct {
-	Icon     []Icon
-	Logo     []Head
 	Category []Cart
 	Data     []Art
 	Data2    []Artn
 }
 
 type Cartl struct {
-	Icon     []Icon
-	Logo     []Head
 	PickC    []Cart
 	Category []Cart
 	Data     []Art
@@ -45,7 +39,5 @@ type Cart struct {
 }
 
 type Kdb struct {
-	Icon []Icon
-	Logo []Head
 	Data []Cart
 }

@@ -17,8 +17,6 @@ type Team struct {
 }
 
 type Dab struct {
-	Icon  []Icon
-	Logo  []Head
 	Data1 []Ab
 	Data2 []Ab
 	Data3 []Team

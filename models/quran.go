@@ -29,8 +29,6 @@ type Next struct {
 }
 
 type Dqrn struct {
-	Icon        []Icon
-	Logo        []Head
 	Pickedsurah []Picked
 	Surah       []Surah
 	Data        []Qrn
@@ -45,7 +43,5 @@ type Qrns struct {
 }
 
 type Dqs struct {
-	Icon []Icon
-	Logo []Head
 	Data []Qrns
 }

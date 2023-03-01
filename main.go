@@ -30,6 +30,7 @@ func main() {
 	r.HandleFunc("/Img", authcontroller.Imgp).Methods("GET")
 	r.HandleFunc("/home", homecontroller.Home).Methods("GET")
 	r.HandleFunc("/logo-icon", homecontroller.Header).Methods("GET")
+	r.HandleFunc("/sign/logo-icon/{id}", homecontroller.UserHeader).Methods("GET")
 
 	r.HandleFunc("/ashusna", ahd.Ashusna).Methods("GET")
 

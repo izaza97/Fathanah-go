@@ -27,24 +27,21 @@ type Home struct {
 	Data3 []Vbrt
 }
 
-// type UserS struct {
-// 	Id       int64  `gorm:"primaryKey" json:"id"`
-// 	Name     string `json:"name"`
-// 	Username string `json:"username"`
-// 	Email    string `json:"email"`
-// 	Img      string `json:"img"`
-// }
-
 type Slide struct {
-	Id     int    `json:"id"`
-	Name   string `json:"name"`
-	Img    string `json:"img"`
-	Path   string `json:"path"`
-	Status string `json:"status"`
-	Url    string `json:"url"`
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+	Img  string `json:"img"`
+	Path string `json:"path"`
 }
 
 type Head struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+	Img  string `json:"img"`
+	Path string `json:"path"`
+}
+
+type Nuser struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
 	Img  string `json:"img"`
@@ -59,6 +56,7 @@ type Icon struct {
 }
 
 type Hd struct {
-	Icon []Icon
-	Logo []Head
+	Icon    []Icon
+	Logo    []Head
+	Navuser []Nuser
 }

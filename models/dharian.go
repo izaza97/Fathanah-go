@@ -15,8 +15,6 @@ type Dh2 struct {
 }
 
 type Ddh struct {
-	Icon []Icon
-	Logo []Head
 	Menu []Dh2
 	Data []Dh
 }
@@ -27,7 +25,5 @@ type Kdh struct {
 }
 
 type Ddh2 struct {
-	Icon []Icon
-	Logo []Head
 	Data []Kdh
 }

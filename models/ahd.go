@@ -8,7 +8,5 @@ type AH struct {
 }
 
 type R_ah struct {
-	Icon []Icon
-	Logo []Head
 	Data []AH
 }

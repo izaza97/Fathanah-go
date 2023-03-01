@@ -30,8 +30,6 @@ func Kberita(w http.ResponseWriter, _ *http.Request) {
 	if icon != nil {
 		log.Print(icon.Error())
 	}
-	response.Icon = Ic
-	response.Logo = Lg
 	response.Data = kb
 	w.Header().Set("Content-Type", "appication/json")
 	json.NewEncoder(w).Encode(response)
@@ -40,9 +38,7 @@ func Kberita(w http.ResponseWriter, _ *http.Request) {
 //show berita controller
 func Showm(w http.ResponseWriter, r *http.Request) {
 	var brt []models.Art
-	Lg := []models.Head{}
 	Ac := []models.Cart{}
-	Ic := []models.Icon{}
 	var article models.Dart
 	title := r.FormValue("title")
 	category := models.DB.Table("article-category").Scan(&Ac).Error
@@ -54,16 +50,6 @@ func Showm(w http.ResponseWriter, r *http.Request) {
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
-	header := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'Fathanah'").Find(&Lg).Error
-	if header != nil {
-		log.Print(header.Error())
-	}
-	icon := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'favicon'").Find(&Ic).Error
-	if icon != nil {
-		log.Print(icon.Error())
-	}
-	article.Icon = Ic
-	article.Logo = Lg
 	article.Category = Ac
 	article.Data = brt
 	w.Header().Set("Content-Type", "appication/json")
@@ -72,10 +58,8 @@ func Showm(w http.ResponseWriter, r *http.Request) {
 
 func Showc(w http.ResponseWriter, r *http.Request) {
 	var brt []models.Art
-	Lg := []models.Head{}
 	Pac := []models.Cart{}
 	Ac := []models.Cart{}
-	Ic := []models.Icon{}
 	var article models.Cartl
 	vars := mux.Vars(r)
 	title := r.FormValue("title")
@@ -97,16 +81,6 @@ func Showc(w http.ResponseWriter, r *http.Request) {
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
-	result := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'Fathanah'").Find(&Lg).Error
-	if result != nil {
-		log.Print(result.Error())
-	}
-	icon := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'favicon'").Find(&Ic).Error
-	if icon != nil {
-		log.Print(icon.Error())
-	}
-	article.Icon = Ic
-	article.Logo = Lg
 	article.PickC = Pac
 	article.Category = Ac
 	article.Data = brt
@@ -125,8 +99,6 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 	var art []models.Art
 	var artn []models.Artn
-	Ic := []models.Icon{}
-	Lg := []models.Head{}
 	var article models.Vart
 	if err := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`time`, `article-data`.`img`, `article-data`.`title`, `article-category`.`category`, `article-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `article-category` JOIN `img-path` ON `article-data`.`category` = `article-category`.`id` AND `article-data`.`path` =`img-path`.`id`").Where("`article-data`.`id`= ?", id).Find(&art).Error; err != nil {
 		response := map[string]string{"message": err.Error()}
@@ -137,16 +109,6 @@ func Show(w http.ResponseWriter, r *http.Request) {
 	if result2 != nil {
 		log.Print(result2.Error())
 	}
-	logo := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'Fathanah'").Find(&Lg).Error
-	if logo != nil {
-		log.Print(logo.Error())
-	}
-	icon := models.DB.Table("img-asset").Select("`img-asset`.`id`, `img-asset`.`name`, `img-asset`.`img`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `img-asset`.`path` =`img-path`.`id`").Where("`img-asset`.`name` = 'favicon'").Find(&Ic).Error
-	if icon != nil {
-		log.Print(icon.Error())
-	}
-	article.Icon = Ic
-	article.Logo = Lg
 	article.Data = art
 	article.Data2 = artn
 	w.Header().Set("Content-Type", "appication/json")

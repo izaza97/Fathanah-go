@@ -20,8 +20,6 @@ type Feature struct {
 }
 
 type Home struct {
-	Icon  []Icon
-	Logo  []Head
 	Data1 []Slide
 	Data2 []Feature
 	Data3 []Vbrt

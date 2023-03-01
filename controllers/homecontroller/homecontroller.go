@@ -75,7 +75,7 @@ func UserHeader(w http.ResponseWriter, r *http.Request) {
 	if logo != nil {
 		log.Print(logo.Error())
 	}
-	if err := models.DB.Table("web-user-data").Select("`web-user-data`.id, `web-user-data`.`name`, `web-user-pp`.`img`, `img-path`.`path`").Joins("INNER JOIN `web-user-pp` ON `web-user-data`.`pp` = `web-user-pp`.`id` JOIN `img-path` ON `img-path`.`id` = `web-user-pp`.`id`").Where("`web-user-data`.`id` = ?", id).Scan(&Nu).Error; err != nil {
+	if err := models.DB.Table("web-user-data").Select("`web-user-data`.id, `web-user-data`.`name`, `web-user-pp`.`img`, `img-path`.`path`").Joins("LEFT JOIN `web-user-pp` ON `web-user-data`.`pp` = `web-user-pp`.`id` LEFT JOIN `img-path` ON `img-path`.`id` = `web-user-pp`.`path`").Where("`web-user-data`.`id` = ?", id).Scan(&Nu).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			helper.ResponseError(w, http.StatusNotFound, "user tidak ditemukan")

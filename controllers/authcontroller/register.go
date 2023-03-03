@@ -36,23 +36,27 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	// ambil data user berdasarkan username
 	var user models.User
-	if err := models.DB.Table("web-user-data").Where("username = ?", userInput.Username).First(&user).Error; err != nil {
+	if name == "" || username == "" || email == "" || password == "" || passwordconfirm == "" {
+		response := map[string]string{"Message": "Failed"}
+		helper.ResponseJSON(w, http.StatusUnauthorized, response)
+		return
+	} else if err := models.DB.Table("web-user-data").Where("username = ?", userInput.Username).First(&user).Error; err != nil {
 		switch err {
 		default:
 			// insert ke database
 			if password == passwordconfirm {
 				models.DB.Table("web-user-data").Create(&userInput)
-				response := map[string]string{"message": "Success"}
+				response := map[string]string{"Message": "Success"}
 				helper.ResponseJSON(w, http.StatusInternalServerError, response)
 				return
 			} else {
-				response := map[string]string{"message": "Failed"}
+				response := map[string]string{"Message": "Failed"}
 				helper.ResponseJSON(w, http.StatusInternalServerError, response)
 				return
 			}
 		}
 	} else {
-		response := map[string]string{"message": "Failed"}
+		response := map[string]string{"Message": "Failed"}
 		helper.ResponseJSON(w, http.StatusUnauthorized, response)
 		return
 	}

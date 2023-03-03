@@ -47,7 +47,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	pass.Write([]byte(userInput.Password))
 	shapass := pass.Sum(nil)
 	userInput.Password = hex.EncodeToString(shapass)
-	if err := models.DB.Table("web-user-data").Where("password = ?", userInput.Password).First(&user).Error; err != nil {
+	if err := models.DB.Table("web-user-data").Where("password = ?", userInput.Password).Scan(&user).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			response := map[string]string{"Message": "Failed", "status": "0"}

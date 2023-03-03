@@ -50,7 +50,6 @@ type Ud struct {
 
 type UI struct {
 	Id      int64  `gorm:"primaryKey" json:"id"`
-	Status  int64  `json:"status"`
 	Message string `json:"Message"`
 }
 

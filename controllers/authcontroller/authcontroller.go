@@ -26,7 +26,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 	var user []models.UserS
 	var useri models.Ud
-	if err := models.DB.Table("web-user-data").Select("`web-user-data`.id, `web-user-data`.`name`, `web-user-data`.`username`, `web-user-data`.`email`, `web-user-data`.`password`,`web-user-pp`.`img`").Joins("INNER JOIN `web-user-pp` ON `web-user-data`.`pp` = `web-user-pp`.`id`").First(&user, id).Error; err != nil {
+	if err := models.DB.Table("web-user-data").Select("`web-user-data`.id, `web-user-data`.`name`, `web-user-data`.`username`, `web-user-data`.`email`, `web-user-data`.`password`,`web-user-pp`.`img`").Joins("INNER JOIN `web-user-pp` ON `web-user-data`.`pp` = `web-user-pp`.`id`").Where("`web-user-data`.`id` = ?", id).Scan(&user).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			helper.ResponseError(w, http.StatusNotFound, "user tidak ditemukan")
@@ -199,7 +199,7 @@ func Updatepw(w http.ResponseWriter, r *http.Request) {
 func Imgp(w http.ResponseWriter, _ *http.Request) {
 	img := []models.Imgp{}
 	var response models.Ip
-	result := models.DB.Table("web-user-pp").Select("`web-user-pp`.id, `web-user-pp`.`img`, `web-user-pp`.`status`, `web-user-pp`.`name`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `web-user-pp`.`path` =`img-path`.`id`").Scan(&img).Error
+	result := models.DB.Table("web-user-pp").Select("`web-user-pp`.id, `web-user-pp`.`img`, `web-user-pp`.`name`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `web-user-pp`.`path` =`img-path`.`id`").Scan(&img).Error
 	if result != nil {
 		log.Print(result.Error())
 	}

@@ -48,7 +48,7 @@ type Ud struct {
 	Data []UserS
 }
 
-type UI struct {
+type Userlogin struct {
 	Id      int64  `gorm:"primaryKey" json:"id"`
 	Message string `json:"Message"`
 }

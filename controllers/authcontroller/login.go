@@ -32,8 +32,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err := models.DB.Table("web-user-data").Where("username = ?", userInput.Username).Or("email= ?", userInput.Email).First(&user).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
-			response := map[string]string{"Message": "Failed"}
-			helper.ResponseJSON(w, http.StatusUnauthorized, response)
+			response := map[string]string{"Message": "FAILED"}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
 			return
 		default:
 			response := map[string]string{"Message": err.Error()}
@@ -50,8 +50,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err := models.DB.Table("web-user-data").Where("password = ?", userInput.Password).Scan(&user).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
-			response := map[string]string{"Message": "Failed", "status": "0"}
-			helper.ResponseJSON(w, http.StatusUnauthorized, response)
+			response := map[string]string{"Message": "FAILED"}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
 			return
 		default:
 			response := map[string]string{"message": err.Error()}
@@ -60,7 +60,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	var Ui models.UI
+	var Ui models.Userlogin
 	result := models.DB.Table("web-user-data").Where("username = ?", userInput.Username).Or("email= ?", userInput.Email).First(&Ui).Error
 	if result != nil {
 		log.Print(result.Error())

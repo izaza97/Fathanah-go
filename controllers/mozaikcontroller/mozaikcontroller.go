@@ -17,7 +17,7 @@ func Mozaik(w http.ResponseWriter, r *http.Request) {
 	var Dmzk models.Dmozaik     //model data akhir
 
 	//query GET data mozaik
-	if err := models.DB.Table("mozaik-data").Select("`mozaik-data`.`id`, `mozaik-data`.`time`, `mozaik-data`.`img`, `mozaik-data`.`title`,  `mozaik-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `mozaik-data`.`path` =`img-path`.`id`").Find(&mzk).Error; err != nil {
+	if err := models.DB.Table("mozaik-data").Select("`mozaik-data`.`id`, `mozaik-data`.`img`, `mozaik-data`.`title`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `mozaik-data`.`path` =`img-path`.`id`").Find(&mzk).Error; err != nil {
 		response := map[string]string{"message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
@@ -45,7 +45,7 @@ func Mozaikview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result2 := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`title`, `article-data`.`time`").Limit(5).Order("time DESC").Find(&mzkl).Error
+	result2 := models.DB.Table("mozaik-data").Select("`mozaik-data`.`id`, `mozaik-data`.`title`, `mozaik-data`.`time`").Limit(5).Order("time DESC").Find(&mzkl).Error
 	if result2 != nil {
 		log.Print(result2.Error())
 	}

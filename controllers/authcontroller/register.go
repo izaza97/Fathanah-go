@@ -23,11 +23,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	email := r.Form.Get("email")
 	password := r.Form.Get("password")
 	passwordconfirm := r.Form.Get("passwordconfirm")
+	profil := r.Form.Get("profil")
 	userInput.Name = name
 	userInput.Username = username
 	userInput.Email = email
 	userInput.Password = password
-
+	userInput.Pp = profil
 	// amankan pass menggunakan sha256
 	pass := sha256.New()
 	pass.Write([]byte(userInput.Password))

@@ -12,6 +12,6 @@ func ResponseJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 
-func ResponseError(w http.ResponseWriter, code int, message string) {
-	ResponseJSON(w, code, map[string]string{"message": message})
+func ResponseError(w http.ResponseWriter, code int, Message string) {
+	ResponseJSON(w, code, map[string]string{"Message": Message})
 }

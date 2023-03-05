@@ -10,7 +10,6 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-
 )
 
 func Kberita(w http.ResponseWriter, _ *http.Request) {
@@ -46,7 +45,7 @@ func Showm(w http.ResponseWriter, r *http.Request) {
 		log.Print(category.Error())
 	}
 	if err := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`time`, `article-data`.`img`, `article-data`.`title`, `article-category`.`category`, `article-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `article-category` JOIN `img-path` ON `article-data`.`category` = `article-category`.`id` AND `article-data`.`path` =`img-path`.`id`").Where("`article-data`.`title` LIKE ?", fmt.Sprintf("%%%s%%", title)).Find(&brt).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
@@ -77,7 +76,7 @@ func Showc(w http.ResponseWriter, r *http.Request) {
 		log.Print(category.Error())
 	}
 	if err := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`time`, `article-data`.`img`, `article-data`.`title`, `article-category`.`category`, `article-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `article-category` JOIN `img-path` ON `article-data`.`category` = `article-category`.`id` AND `article-data`.`path` =`img-path`.`id`").Where("`article-data`.`title` LIKE ?", fmt.Sprintf("%%%s%%", title)).Where("`article-category`.`id` = ?", id).Find(&brt).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
@@ -101,7 +100,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 	var artn []models.Artn
 	var article models.Vart
 	if err := models.DB.Table("article-data").Select("`article-data`.`id`, `article-data`.`time`, `article-data`.`img`, `article-data`.`title`, `article-category`.`category`, `article-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `article-category` JOIN `img-path` ON `article-data`.`category` = `article-category`.`id` AND `article-data`.`path` =`img-path`.`id`").Where("`article-data`.`id`= ?", id).Find(&art).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}

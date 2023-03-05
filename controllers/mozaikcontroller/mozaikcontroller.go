@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-
 )
 
 func Mozaik(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +17,7 @@ func Mozaik(w http.ResponseWriter, r *http.Request) {
 
 	//query GET data mozaik
 	if err := models.DB.Table("mozaik-data").Select("`mozaik-data`.`id`, `mozaik-data`.`img`, `mozaik-data`.`title`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `mozaik-data`.`path` =`img-path`.`id`").Find(&mzk).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
@@ -40,7 +39,7 @@ func Mozaikview(w http.ResponseWriter, r *http.Request) {
 	var Dmzk models.Vmozaik
 
 	if err := models.DB.Table("mozaik-data").Select("`mozaik-data`.`id`, `mozaik-data`.`time`, `mozaik-data`.`img`, `mozaik-data`.`title`,  `mozaik-data`.`desc`, `img-path`.`path`").Joins("INNER JOIN `img-path` ON `mozaik-data`.`path` =`img-path`.`id`").Where("`mozaik-data`.`id` =  ?", id).Find(&mzk).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}

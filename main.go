@@ -51,7 +51,7 @@ func main() {
 	r.HandleFunc("/mozaikislam", mozaikcontroller.Mozaik).Methods("GET")
 	r.HandleFunc("/mozaikislam/{id}", mozaikcontroller.Mozaikview).Methods("GET")
 
-	r.HandleFunc("/sign/{id}/message", mssgcontroller.Message).Methods("POST")
+	r.HandleFunc("/sign/{id}/Message", mssgcontroller.Message).Methods("POST")
 
 	r.HandleFunc("/about", asetcontroller.About).Methods("GET")
 
@@ -61,6 +61,8 @@ func main() {
 	r.HandleFunc("/sign/{id}/updateuser", authcontroller.Updateprofile).Methods("POST")
 	r.HandleFunc("/sign/{id}/userdata", authcontroller.Showun).Methods("GET")
 	r.HandleFunc("/sign/{id}/updatepw", authcontroller.Updatepw).Methods("POST")
+	r.HandleFunc("/forgotpass", authcontroller.Forgotpass).Methods("POST")
+	r.HandleFunc("/sign/{id}/forgotpass", authcontroller.Newpass).Methods("POST")
 
 	r.HandleFunc("/sign/{user}/diary", diarycontroller.GetAllDiary).Methods("GET")
 	r.HandleFunc("/sign/{user}/diary/create", diarycontroller.CreateDiary).Methods("POST")

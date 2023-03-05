@@ -6,7 +6,6 @@ import (
 	"fathanah/helper"
 	"fathanah/models"
 	"net/http"
-
 )
 
 //register controller

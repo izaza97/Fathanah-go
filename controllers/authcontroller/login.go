@@ -9,7 +9,6 @@ import (
 	"net/http"
 
 	"gorm.io/gorm"
-
 )
 
 //login controllers
@@ -54,19 +53,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			helper.ResponseJSON(w, http.StatusInternalServerError, response)
 			return
 		default:
-			response := map[string]string{"message": err.Error()}
+			response := map[string]string{"Message": err.Error()}
 			helper.ResponseJSON(w, http.StatusInternalServerError, response)
 			return
 		}
 	}
 
 	var Ui models.Userlogin
-	result := models.DB.Table("web-user-data").Where("username = ?", userInput.Username).Or("email= ?", userInput.Email).First(&Ui).Error
+	result := models.DB.Table("web-user-data").Where("username = ? AND password = ?", userInput.Username, userInput.Password).Or("email= ?", userInput.Email).First(&Ui).Error
 	if result != nil {
 		log.Print(result.Error())
+		Ui.Message = "FAILED"
+		w.Header().Set("Content-Type", "appication/json")
+		helper.ResponseJSON(w, http.StatusOK, Ui)
+	} else {
+		Ui.Message = "SUCCESS"
+		w.Header().Set("Content-Type", "appication/json")
+		helper.ResponseJSON(w, http.StatusOK, Ui)
 	}
-
-	Ui.Message = "SUCCESS"
-	w.Header().Set("Content-Type", "appication/json")
-	helper.ResponseJSON(w, http.StatusOK, Ui)
 }

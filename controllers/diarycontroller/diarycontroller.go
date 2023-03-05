@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-
 )
 
 func GetAllDiary(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +26,7 @@ func GetAllDiary(w http.ResponseWriter, r *http.Request) {
 	Ic := []models.Icon{}
 	var response models.Dd
 	if err := models.DB.Table("diary-data").Where("`diary-data`.`user` = ?", user).Order("time DESC").Find(&diary).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
@@ -69,14 +68,14 @@ func CreateDiary(w http.ResponseWriter, r *http.Request) {
 
 	// input ke database
 	if err := models.DB.Table("diary-data").Create(&diaryInput).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
 
 	diaryInput.User = user
 
-	response := map[string]string{"message": "success"}
+	response := map[string]string{"Message": "success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
@@ -102,7 +101,7 @@ func GetDiary(w http.ResponseWriter, r *http.Request) {
 	diaryInput := models.Diary{User: user, No: no}
 
 	if err := models.DB.Table("diary-data").Where(&diaryInput, user, no).Find(&diary).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
@@ -141,14 +140,14 @@ func UpdateDiary(w http.ResponseWriter, r *http.Request) {
 
 	// input ke database
 	if err := models.DB.Table("diary-data").Where("no = ?", no).Updates(&diaryInput).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
 
 	diaryInput.No = no
 
-	response := map[string]string{"message": "success"}
+	response := map[string]string{"Message": "success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
@@ -165,11 +164,11 @@ func DeleteDiary(w http.ResponseWriter, r *http.Request) {
 
 	// input ke database
 	if err := models.DB.Table("diary-data").Where("no = ?", no).Delete(&diary).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
 
-	response := map[string]string{"message": "success"}
+	response := map[string]string{"Message": "success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }

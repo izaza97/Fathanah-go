@@ -11,7 +11,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/gomail.v2"
-
 )
 
 const CONFIG_SMTP_HOST = "smtp.gmail.com"
@@ -52,24 +51,24 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 	mssgInput := models.Mail{User: id, Subject: user.Name, Datetime: now.String()}
 	// subject := r.Form.Get("subject")
-	message := r.Form.Get("message")
-	mssgInput.Message = message
+	Message := r.Form.Get("Message")
+	mssgInput.Message = Message
 
 	// input ke database
-	result := models.DB.Table("user-message").Create(&mssgInput).Error
+	result := models.DB.Table("user-Message").Create(&mssgInput).Error
 	if result != nil {
 		log.Print("error")
 	}
 	mssgInput.Subject = user.Name
 	mssgInput.User = id
 
-	response := map[string]string{"message": "success"}
+	response := map[string]string{"Message": "success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 	mailer := gomail.NewMessage()
 	mailer.SetHeader("From", CONFIG_SENDER_NAME)
 	mailer.SetHeader("To", "kammi.fmn@gmail.com")
 	mailer.SetHeader("Subject", user.Name)
-	mailer.SetBody("text/html", message)
+	mailer.SetBody("text/html", Message)
 
 	dialer := gomail.NewDialer(
 		CONFIG_SMTP_HOST,

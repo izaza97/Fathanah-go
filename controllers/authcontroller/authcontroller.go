@@ -101,58 +101,12 @@ func Updateprofile(w http.ResponseWriter, r *http.Request) {
 		default:
 			// insert ke database
 			models.DB.Table("web-user-data").Where("id = ?", id).Updates(&userInput)
-			response := map[string]string{"message": "success"}
+			response := map[string]string{"Message": "SUCCESS"}
 			helper.ResponseJSON(w, http.StatusInternalServerError, response)
 			return
 		}
 	} else {
-		response := map[string]string{"message": "Username already taken"}
-		helper.ResponseJSON(w, http.StatusUnauthorized, response)
-		return
-	}
-	// if models.DB.Table("web-user-data").Where("id = ?", id).Updates(&userInput).RowsAffected == 0 {
-	// 	helper.ResponseError(w, http.StatusBadRequest, "Tidak dapat mengupdate user")
-	// 	return
-	// }
-
-	// userInput.Id = id
-
-	// response := map[string]string{"message": "success"}
-	// helper.ResponseJSON(w, http.StatusOK, response)
-}
-
-func Updateusername(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-	id, err := strconv.ParseInt(vars["id"], 10, 64)
-	if err != nil {
-		helper.ResponseError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	var userInput models.UU
-	errr := r.ParseForm()
-	if errr != nil {
-		panic(err)
-	}
-	username := r.Form.Get("username")
-	userInput.Username = username
-
-	defer r.Body.Close()
-
-	//
-	var user models.UU
-	if err := models.DB.Table("web-web-user-data").Where("username = ?", userInput.Username).First(&user).Error; err != nil {
-		switch err {
-		default:
-			// insert ke database
-			models.DB.Table("web-user-data").Where("id = ?", id).Updates(&userInput)
-			response := map[string]string{"message": "success"}
-			helper.ResponseJSON(w, http.StatusInternalServerError, response)
-			return
-		}
-	} else {
-		response := map[string]string{"message": "Username already taken"}
+		response := map[string]string{"Message": "FAILED"}
 		helper.ResponseJSON(w, http.StatusUnauthorized, response)
 		return
 	}
@@ -168,29 +122,122 @@ func Updatepw(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var userInput models.UP
+	var oldpass models.UP
 	errr := r.ParseForm()
 	if errr != nil {
 		panic(err)
 	}
+	oldpassword := r.Form.Get("oldpassword")
 	password := r.Form.Get("password")
 	passwordconfirm := r.Form.Get("passwordconfirm")
+	oldpass.Password = oldpassword
 	userInput.Password = password
 
 	defer r.Body.Close()
 
 	//
+	oldpas := sha256.New()
+	oldpas.Write([]byte(oldpass.Password))
+	shaoldpas := oldpas.Sum(nil)
+	oldpass.Password = hex.EncodeToString(shaoldpas)
 	pass := sha256.New()
 	pass.Write([]byte(userInput.Password))
 	shapass := pass.Sum(nil)
 	userInput.Password = hex.EncodeToString(shapass)
 
+	var user models.UP
+	if err := models.DB.Table("web-user-data").Where("password = ? AND id = ?", oldpass.Password, id).First(&user).Error; err != nil {
+		switch err {
+		default:
+			response := map[string]string{"Message": "FAILED"}
+			helper.ResponseJSON(w, http.StatusUnauthorized, response)
+			return
+		}
+	} else {
+		// insert ke database
+		if password == passwordconfirm {
+			models.DB.Table("web-user-data").Where("id = ?", id).Updates(&userInput)
+			response := map[string]string{"Message": "SUCCESS"}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
+			return
+		} else {
+			response := map[string]string{"Message": "password not same"}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
+			return
+		}
+	}
+}
+
+func Forgotpass(w http.ResponseWriter, r *http.Request) {
+
+	// mengambil inputan json
+	var userInput models.User
+	err := r.ParseForm()
+	if err != nil {
+		panic(err)
+	}
+	email := r.Form.Get("email")
+	userInput.Email = email
+
+	// ambil data user berdasarkan username
+	var user models.User
+	if err := models.DB.Table("web-user-data").Where("email= ?", userInput.Email).First(&user).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			response := map[string]string{"Message": "FAILED"}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
+			return
+		default:
+			response := map[string]string{"Message": err.Error()}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
+			return
+		}
+	}
+
+	var Ui models.Userlogin
+	result := models.DB.Table("web-user-data").Where("email = ?", userInput.Email).First(&Ui).Error
+	if result != nil {
+		log.Print(result.Error())
+		Ui.Message = "FAILED"
+		w.Header().Set("Content-Type", "appication/json")
+		helper.ResponseJSON(w, http.StatusOK, Ui)
+	} else {
+		Ui.Message = "SUCCESS"
+		w.Header().Set("Content-Type", "appication/json")
+		helper.ResponseJSON(w, http.StatusOK, Ui)
+	}
+}
+
+func Newpass(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		helper.ResponseError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	var userInput models.UP
+	errr := r.ParseForm()
+	if errr != nil {
+		panic(err)
+	}
+	password := r.Form.Get("newpassword")
+	passwordconfirm := r.Form.Get("passwordconfirm")
+	userInput.Password = password
+	pass := sha256.New()
+	pass.Write([]byte(userInput.Password))
+	shapass := pass.Sum(nil)
+	userInput.Password = hex.EncodeToString(shapass)
+
+	//
 	if password == passwordconfirm {
-		models.DB.Table("web-web-user-data").Where("id = ?", id).Updates(&userInput)
-		response := map[string]string{"message": "success"}
+		models.DB.Table("web-user-data").Where("id = ?", id).Updates(&userInput)
+		response := map[string]string{"Message": "SUCCESS"}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	} else {
-		response := map[string]string{"message": "password not same"}
+		response := map[string]string{"Message": "password not same"}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}

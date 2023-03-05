@@ -10,7 +10,6 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-
 )
 
 func Qrnsurah(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +45,7 @@ func Shows(w http.ResponseWriter, r *http.Request) {
 		log.Print(Pickedsurah.Error())
 	}
 	if err := models.DB.Table("quran-data").Select("`quran-data`.`id`, `quran-surah`.`name`, `quran-data`.`arab`, `quran-data`.`latin`, `quran-data`.`meaning`").Joins("INNER JOIN `quran-surah` ON `quran-data`.`surah` = `quran-surah`.`id`").Where("`quran-data`.`surah` = ?", surah).Find(&dh).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"Message": err.Error()}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
